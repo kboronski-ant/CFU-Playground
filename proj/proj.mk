@@ -159,17 +159,20 @@ else
 	$(error PLATFORM must be 'arty' or 'nexys_video' or 'qmtech_wukong' or 'sim')
 endif
 
+TARGET_REPL := $(BUILD_DIR)/renode/$(TARGET)_generated.repl
+
 .PHONY:	renode 
 renode: $(SOFTWARE_ELF) renode-repl
 	@echo Running interactively under renode
 	$(COPY) $(SOFTWARE_ELF) $(PROJ_DIR)/renode/
-	pushd $(PROJ_DIR)/renode/ && renode -e "s @litex-vexriscv-tflite.resc" && popd
+	pushd $(PROJ_DIR)/renode/ && renode -e "s @$(TARGET).resc" && popd
 
 .PHONY: renode-repl
 renode-repl:
 ifneq ("$(wildcard $(SOC_BUILD_DIR)/csr.csv)","")
-	$(LITEX_RENODE_DIR)/generate-renode-scripts.py $(SOC_BUILD_DIR)/csr.csv --repl $(PROJ_DIR)/renode/litex-vexriscv-tflite.repl
-	@echo Renode repl file $(PROJ_DIR)/renode/litex-vexriscv-tflite.repl generated
+	@mkdir -p $(BUILD_DIR)/renode
+	$(CFU_ROOT)/scripts/generate_renode_scripts.py $(SOC_BUILD_DIR)/csr.csv $(TARGET) $(BUILD_DIR)/renode/ --repl $(TARGET_REPL)
+	@echo Renode files generated
 else
 	@echo $(SOC_BUILD_DIR)/csr.csv not found
 endif

@@ -77,13 +77,13 @@ jobs:
     - name: Setup environment
       run: bash scripts/setup -ci
     - name: Build sample & generate Renode repl
-      run: pwd && source environment && cd proj/proj_template && make  PLATFORM=common_soc TARGET=${{ matrix.target }} -j8 software && make renode-repl TARGET=${{ matrix.target }} && cp build/software.elf renode/
+      run: pwd && source environment && cd proj/proj_template && make  PLATFORM=common_soc TARGET=${{ matrix.target }} -j8 software && make renode-repl TARGET=${{ matrix.target }}
     - name: Run tests
       timeout-minutes: 5
       uses: antmicro/renode-actions/test-in-renode@main
       with:
         renode-version: 1.12.0+20210403git44d6786
-        tests-to-run: proj/proj_template/renode/litex-vexriscv-tflite.robot
+        tests-to-run: proj/proj_template/build/renode/${{ matrix.target }}.robot
     - name: Archive results
       if: ${{ success() || failure() }}
       uses: actions/upload-artifact@v2
@@ -122,13 +122,13 @@ jobs:
     - name: Setup environment
       run: bash scripts/setup -ci
     - name: Build sample & generate Renode repl
-      run: pwd && source environment && cd proj/mnv2_first && make SW_ONLY=1 PLATFORM=common_soc TARGET=${{ matrix.target }} -j8 software && make renode-repl TARGET=${{ matrix.target }} && cp build/software.elf renode/
+      run: pwd && source environment && cd proj/mnv2_first && make SW_ONLY=1 PLATFORM=common_soc TARGET=${{ matrix.target }} -j8 software && make renode-repl TARGET=${{ matrix.target }}
     - name: Run tests
       timeout-minutes: 5
       uses: antmicro/renode-actions/test-in-renode@main
       with:
         renode-version: 1.12.0+20210403git44d6786
-        tests-to-run: proj/mnv2_first/renode/litex-vexriscv-tflite.robot
+        tests-to-run: proj/mnv2_first/build/renode/${{ matrix.target }}.robot
     - name: Archive results
       if: ${{ success() || failure() }}
       uses: actions/upload-artifact@v2
@@ -166,7 +166,7 @@ jobs:
     - name: Setup environment
       run: bash scripts/setup -ci
     - name: Build sample & generate Renode repl
-      run: pwd && source environment && cd proj/mnv2_first && make SW_ONLY=1 PLATFORM=hps TARGET=${{ matrix.target }} -j8 software && make renode-repl TARGET=${{ matrix.target }} && cp build/software.elf renode/
+      run: pwd && source environment && cd proj/mnv2_first && make SW_ONLY=1 PLATFORM=hps TARGET=${{ matrix.target }} -j8 software && make renode-repl TARGET=${{ matrix.target }}
     - name: Run tests
       timeout-minutes: 5
       uses: antmicro/renode-actions/test-in-renode@main

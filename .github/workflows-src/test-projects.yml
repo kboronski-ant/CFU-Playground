@@ -100,7 +100,7 @@ jobs:
         with:
           proj-name: proj_template
           platform: common_soc
-          test: proj/proj_template/renode/litex-vexriscv-tflite.robot
+          test: proj/proj_template/build/renode/${{ matrix.target }}.robot
 
   mnv2_first-common:
     runs-on: ubuntu-20.04
@@ -161,7 +161,7 @@ jobs:
         with:
           proj-name: mnv2_first
           platform: common_soc
-          test: proj/mnv2_first/renode/litex-vexriscv-tflite.robot
+          test: proj/mnv2_first/build/renode/${{ matrix.target }}.robot
           build-params: SW_ONLY=1
 
   mnv2_first-hps:
