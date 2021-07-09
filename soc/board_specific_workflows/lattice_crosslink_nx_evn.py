@@ -33,45 +33,36 @@ KB = 1024
 MB = 1024 * KB
 
 
-class Counter(Module, AutoCSR):
-    def __init__(self, pads, spiflash):
+class SpiFlashCounter(Module, AutoCSR):
+    def __init__(self, pads):
         self.control = CSRStorage(description="Counter control register",
             fields=[
-                CSRField("enable", size=1, description="eneable counter"),
+                CSRField("enable", size=1, description="enable counter"),
                 CSRField("reset",  size=1, description="reset counter", pulse=1)
             ])
 
-        self.counter = CSRStatus(description="Counter register",
+        self.counter = CSRStatus(description="Counter data register",
             fields=[
-                CSRField("clk_ticks", size=32, description="clk data"),
-                CSRField("cs_ticks", size=32, description="cs data"),
+                CSRField("clk_ticks", size=32, description="Count the system ticks during the counter is active"),
+                CSRField("cs_ticks", size=32, description="Count the system ticks during the spi cs line is active"),
             ])
-        cnt_clk = Signal(32)
         cnt_cs = Signal(32)
-
-        # fake clk to syn with sck
-        fake_clk = Signal()
-        div = Signal(len(spiflash.phy._spi_clk_divisor))
-        div_cnt = Signal(len(spiflash.phy._spi_clk_divisor), reset=0)
-        self.comb += div.eq(spiflash.phy._spi_clk_divisor)
+        cnt_clk = Signal(32)
 
         self.sync += [
             If(self.control.fields.reset,
                 cnt_cs.eq(0),
-                cnt_clk.eq(0)
-            ).Elif(~pads.cs_n&self.control.fields.enable,
-                cnt_cs.eq(cnt_cs+1),
-                If(div_cnt < div,
-                    div_cnt.eq(div_cnt+1),
-                ).Else(
-                    div_cnt.eq(0),
-                    cnt_clk.eq(cnt_clk+1)
+                cnt_clk.eq(0),
+            ).Elif(self.control.fields.enable,
+                cnt_clk.eq(cnt_cs+1),
+                If(~pads.cs_n,
+                    cnt_cs.eq(cnt_cs+1),
                 )
             )
         ]
 
-        self.comb += [self.counter.fields.clk_ticks.eq(cnt_clk),
-                      self.counter.fields.cs_ticks.eq(cnt_cs)]
+        self.comb += [self.counter.fields.cs_ticks.eq(cnt_cs),
+                self.counter.fields.clk_ticks.eq(cnt_clk)]
 
 
 class LatticeCrossLinkNXEVNSoCWorkflow(general.GeneralSoCWorkflow):
@@ -97,8 +88,8 @@ class LatticeCrossLinkNXEVNSoCWorkflow(general.GeneralSoCWorkflow):
         soc.bus.add_slave(name="spiflash", slave=soc.spiflash_mmap.bus, region=soc.spiflash_region)
         soc.bus.add_region("rom", soc.spiflash_region)
 
-        soc.submodules.counter = Counter(spi_platform, soc.spiflash_phy)
-        soc.csr.add("counter")
+        soc.submodules.spi_flash_counter = SpiFlashCounter(spi_platform)
+        soc.csr.add("spi_flash_counter")
         soc.constants['LITESPI_CS_COUNTER'] = 1
 
         return soc
