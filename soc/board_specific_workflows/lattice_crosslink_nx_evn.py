@@ -70,16 +70,17 @@ class SpiFlashCounter(Module, AutoCSR):
 class LatticeCrossLinkNXEVNSoCWorkflow(general.GeneralSoCWorkflow):
     def make_soc(self, **kwargs) -> litex_soc.LiteXSoC:
         soc = super().make_soc(
-            integrated_rom_size=0,
-            integrated_rom_init=[],
+            #integrated_rom_size=0,
+            #integrated_rom_init=[],
+            sys_clk_freq=int(10e6),
             **kwargs
         )
 
-        soc.spiflash_region = SoCRegion(0x00000000, 16 * MB, mode="r", cached=True, linker=True)
-        spi_platform = soc.platform.request("spiflash")
+        soc.spiflash_region = SoCRegion(0x20000000, 16 * MB, mode="r", cached=True, linker=True)
+        spi_platform = soc.platform.request("spiflash4x")
         soc.submodules.spiflash_phy = LiteSPIPHY(
             spi_platform,
-            MX25L12835F(Codes.READ_1_1_1),
+            MX25L12835F(Codes.READ_1_1_4),
             default_divisor=1)
         soc.submodules.spiflash_mmap = LiteSPI(phy=soc.spiflash_phy,
             clk_freq        = soc.sys_clk_freq,
@@ -88,7 +89,7 @@ class LatticeCrossLinkNXEVNSoCWorkflow(general.GeneralSoCWorkflow):
         soc.csr.add("spiflash_mmap")
         soc.csr.add("spiflash_phy")
         soc.bus.add_slave(name="spiflash", slave=soc.spiflash_mmap.bus, region=soc.spiflash_region)
-        soc.bus.add_region("rom", soc.spiflash_region)
+        #soc.bus.add_region("rom", soc.spiflash_region)
 
         soc.submodules.spi_flash_counter = SpiFlashCounter(spi_platform)
         soc.csr.add("spi_flash_counter")
