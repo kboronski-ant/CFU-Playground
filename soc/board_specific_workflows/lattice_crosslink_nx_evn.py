@@ -81,7 +81,7 @@ class LatticeCrossLinkNXEVNSoCWorkflow(general.GeneralSoCWorkflow):
         #spi_platform = soc.platform.request("spiflash")
         soc.submodules.spiflash_phy = LiteSPIPHY(
             spi_platform,
-            MX25L12835F(Codes.READ_1_4_4, program_cmd=Codes.PP_1_4_4),
+            MX25L12835F(Codes.READ_4_4_4, program_cmd=Codes.PP_1_4_4),
             default_divisor=20)
         soc.submodules.spiflash_mmap = LiteSPI(phy=soc.spiflash_phy,
             with_master     = True,
