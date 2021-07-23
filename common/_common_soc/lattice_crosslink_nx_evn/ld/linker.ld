@@ -12,9 +12,6 @@ SECTIONS
 {
 	.text (ORIGIN(spiflash) + FBI_LITEX_OFFSET) :
 	{
-		/*  bytes needed for LiteX BIOS's flashboot */
-		/*. = . + 0x8;*/
-
 		_ftext = .;
 		*(.text.start)
 		*(.text .stub .text.* .gnu.linkonce.t.*)
