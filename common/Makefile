@@ -56,8 +56,6 @@ SHARED_FLAGS := \
 	-I$(SOC_SOFTWARE_DIR)/include \
     -I$(LITEX_HW_DIR) \
     -I$(VEX_SRC_DIR) \
-	-ffunction-sections \
-	-fdata-sections \
 	-fno-common \
 	-fomit-frame-pointer \
 	-ffreestanding \
