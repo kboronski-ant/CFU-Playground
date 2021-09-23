@@ -16,6 +16,9 @@
 # This variable lists symbols to define to the C preprocessor
 export DEFINES := PLACEHOLDER
 
+export EXTRA_LITEX_ARGS
+EXTRA_LITEX_ARGS += --cpu-variant=slimperf+cfu
+
 # Uncomment this line to use software defined CFU
 # DEFINES += CFU_SOFTWARE_DEFINED
 
