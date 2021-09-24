@@ -46,6 +46,7 @@ for s in $(seq ${SEED_COUNT}); do
         --pdc "${PDC}" \
         --fasm "${DIR}/output.fasm" \
         --device LIFCL-17-8UWG72C \
+        --timing-report="${DIR}/timing.json" \
         --seed "${seed}" 2>&1 | \
       (while read line; do 
         echo "$(date +%H:%M:%S) ${line}"; done
@@ -79,6 +80,7 @@ while [[ ${#CHILD_PIDS} -gt 1 ]]; do
     echo "SUCCESS: nextpnr with seed=${seed}"
     cp "runs/seed-${seed}/output.fasm" $RESULT_FASM
     cp "runs/seed-${seed}/nextpnr-nexus.log" nextpnr-nexus.log
+    cp "runs/seed-${seed}/timing.json" timing.json
     # TODO: find a more elegant solution for halting all children
     for p in "${CHILD_PIDS[@]}"; do pkill -P $p; done
     exit 0
