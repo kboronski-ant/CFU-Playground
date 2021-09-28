@@ -31,7 +31,9 @@ DEFINES += INCLUDE_MODEL_PDTI8
 # output model parameters and weights
 #DEFINES += SHOW_CONV_PARAMS
 #DEFINES += SHOW_CONV_OUT_WEIGHTS
+export EXTRA_LITEX_ARGS
+EXTRA_LITEX_ARGS += --cpu-variant=slim+cfu
 
-export UART_SPEED := 3686400
+export UART_SPEED := 115200
 
 include ../proj.mk
