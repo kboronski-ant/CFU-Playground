@@ -265,7 +265,8 @@ class Cfu(SimpleElaboratable):
                     m.d.sync += stored_function_id.eq(
                         self.cmd_function_id[:3])
                     m.d.comb += instruction_starts[current_function_id].eq(1)
-                    check_instruction_done()
+                    #check_instruction_done()
+                    m.next = "WAIT_INSTRUCTION"
             with m.State("WAIT_INSTRUCTION"):
                 # An instruction is executing on the CFU. We're waiting until it
                 # completes.
