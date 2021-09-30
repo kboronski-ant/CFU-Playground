@@ -9,6 +9,7 @@ arg.add_argument('file', help='JSON timing report')
 arg.add_argument('--src', default='', help='Source name')
 arg.add_argument('--dst', default='', help='Destination name')
 arg.add_argument('--results', default=100, type=int, help='Number of paths reported')
+arg.add_argument('--tgt-len', default=0.0, type=float, help='List paths that are longer than this value (in ns)')
 
 args = vars(arg.parse_args())
 
@@ -26,7 +27,8 @@ for net in data['timing_analysis']['detailed_net_timings']:
             if args['dst'] in endpoint['cell']:
                 dly = endpoint['delay']
                 tgt = endpoint['cell']
-                paths.append((src, tgt, dly))
+                if args['tgt_len'] < dly:
+                    paths.append((src, tgt, dly))
 
 paths.sort(key=lambda tup: tup[2], reverse=True)
 
