@@ -32,6 +32,7 @@
 #include "proj_menu.h"
 #include "spiflash.h"
 #include "tflite_unit_tests.h"
+#include "models/hps_model/hps_model.h"
 
 #ifdef PLATFORM_sim
 static void trace_sim() {
@@ -75,6 +76,9 @@ static struct Menu MENU = {
 int main(void) {
   init_runtime();
   printf("Hello, %s!\n", "World");
+
+  hps_model_init();
+  do_golden_tests();
 
   menu_run(&MENU);
 
