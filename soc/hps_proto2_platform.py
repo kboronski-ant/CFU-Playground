@@ -12,33 +12,33 @@ from litex.soc.cores.clock import NXOSCA
 from hps_lattice_nx import NXLRAM
 
 hps_io = [
-    ("done", 0, Pins("A5"), IOStandard("LVCMOS18H")),
-    ("programn", 0, Pins("A4"), IOStandard("LVCMOS18H")),
+    ("done", 0, Pins("58"), IOStandard("LVCMOS18H")),
+    ("programn", 0, Pins("60"), IOStandard("LVCMOS18H")),
     # JTAG: not usually programatically accessible
     ("jtag", 0,
-        Subsignal("en", Pins("C2")),
-        Subsignal("tck", Pins("D2")),
-        Subsignal("tdi", Pins("C3")),
-        Subsignal("tdo", Pins("D3")),
-        Subsignal("tms", Pins("B1")),
+        Subsignal("en", Pins("50")),
+        Subsignal("tck", Pins("41")),
+        Subsignal("tdi", Pins("46")),
+        Subsignal("tdo", Pins("45")),
+        Subsignal("tms", Pins("48")),
         IOStandard("LVCMOS18H"),
         Misc("SLEWRATE=FAST"),
      ),
     # SPI flash, defined two ways
     ("spiflash", 0,
-        Subsignal("cs_n", Pins("A3")),
-        Subsignal("clk", Pins("B4")),
-        Subsignal("mosi", Pins("B5")),
-        Subsignal("miso", Pins("C4")),
-        Subsignal("wp", Pins("B3")),
-        Subsignal("hold", Pins("B2")),
+        Subsignal("cs_n", Pins("56")),
+        Subsignal("clk", Pins("59")),
+        Subsignal("mosi", Pins("57")),
+        Subsignal("miso", Pins("51")),
+        Subsignal("wp", Pins("55")),
+        Subsignal("hold", Pins("52")),
         IOStandard("LVCMOS18"),
         Misc("SLEWRATE=FAST"),
      ),
     ("spiflash4x", 0,
-        Subsignal("cs_n", Pins("A3")),
-        Subsignal("clk", Pins("B4")),
-        Subsignal("dq", Pins("B5 C4 B3 B2")),
+        Subsignal("cs_n", Pins("56")),
+        Subsignal("clk", Pins("59")),
+        Subsignal("dq", Pins("57 51 55 52")),
         IOStandard("LVCMOS18"),
         Misc("SLEWRATE=FAST"),
      ),
@@ -49,14 +49,14 @@ hps_io = [
 hps_nx17_debug_io = [
     # Debug UART
     ("serial", 0,
-        Subsignal("rx", Pins("E2"), IOStandard("LVCMOS18")),
-        Subsignal("tx", Pins("G1"), IOStandard("LVCMOS18H")),
+        Subsignal("rx", Pins("41"), IOStandard("LVCMOS18")),
+        Subsignal("tx", Pins("43"), IOStandard("LVCMOS18H")),
      ),
 ]
 
 # Debug IO that is common to both simulation and hardware.
 hps_debug_common = [
-    ("user_led", 0, Pins("G3"), IOStandard("LVCMOS18H")),
+    ("user_led", 0, Pins("44"), IOStandard("LVCMOS18H")),
 ]
 
 
@@ -131,7 +131,7 @@ class Platform(LatticePlatform):
                                  # The HPS actually has the LIFCL-17-7UWG72C, but that doesn't
                                  # seem to be available in Radiant 2.2, at
                                  # least on Linux.
-                                 device="LIFCL-17-8UWG72C",
+                                 device="LIFCL-40-8SG72C",
                                  io=hps_io + hps_nx17_debug_io + hps_debug_common,
                                  connectors=[],
                                  toolchain=toolchain)

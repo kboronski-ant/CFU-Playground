@@ -21,6 +21,6 @@ nextpnr-nexus \
     --json "${JSON}" \
     --pdc "${PDC}" \
     --fasm "${RESULT_FASM}" \
-    --device LIFCL-17-8UWG72C \
+    --device LIFCL-40-8SG72C \
     --detailed-timing-report \
     ${EXTRA_NEXTPNR_ARGS}
