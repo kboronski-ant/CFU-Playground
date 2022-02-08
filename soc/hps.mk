@@ -63,10 +63,13 @@ HPS_RUN:=   MAKEFLAGS=-j8 $(PYRUN) ./hps_soc.py $(LITEX_ARGS)
 
 BIOS_BIN := $(OUT_DIR)/software/bios/bios.bin
 BITSTREAM:= $(OUT_DIR)/gateware/hps_proto2_platform.bit
+SYNTH:= $(OUT_DIR)/gateware/hps_proto2_platform.json
 
 .PHONY: bitstream litex-software prog clean
 
 bitstream: $(BITSTREAM)
+
+synth: $(SYNTH)
 
 litex-software: $(BIOS_BIN)
 
@@ -86,5 +89,9 @@ $(BIOS_BIN): $(CFU_V)
 	$(HPS_RUN)
 
 $(BITSTREAM): $(CFU_V)
-	@echo Building bitstream for Arty. CFU option: $(CFU_ARGS)
+	@echo Building bitstream for Nexus. CFU option: $(CFU_ARGS)
 	$(HPS_RUN) --build
+
+$(SYNTH): $(CFU_V)
+	@echo Synthesizing sources for Nexus. CFU option: $(CFU_ARGS)
+	$(HPS_RUN) --build --just-synth

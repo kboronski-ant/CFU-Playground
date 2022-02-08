@@ -292,6 +292,7 @@ def main():
                         help="Make the CPU execute from integrated ROM stored in LRAM instead of flash")
     parser.add_argument("--integrated-rom-init", metavar="FILE",
                         help="Use FILE as integrated ROM data instead of default BIOS")
+    parser.add_argument("--just-synth", action='store_true', help="Stop after synthesis")
 
     args = parser.parse_args()
 
@@ -310,7 +311,7 @@ def main():
     else:
         variant = "full+debug" if args.debug else "full"
     copy_cpu_variant_if_needed(variant)
-    soc = HpsSoC(Platform(args.toolchain, args.parallel_nextpnr, args.extra_nextpnr_params),
+    soc = HpsSoC(Platform(args.toolchain, args.parallel_nextpnr, args.extra_nextpnr_params, args.just_synth),
                     debug=args.debug,
                     variant=variant,
                     cpu_cfu=args.cpu_cfu,

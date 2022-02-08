@@ -286,6 +286,9 @@ prog: $(CFU_VERILOG)
 bitstream: $(CFU_VERILOG)
 	$(SOC_MK) bitstream
 
+synth: $(CFU_VERILOG)
+	$(SOC_MK) synth
+
 ifeq '1' '$(words $(TTY))'
 run: $(SOFTWARE_BIN)
 	@echo Running automated pdti8 test on board
